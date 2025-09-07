@@ -1,18 +1,17 @@
 import localFont from "next/font/local";
 import "./globals.css";
+import { Poppins } from "next/font/google"
 import { AppSidebar } from "@/components/ui/app-sidebar";
 import { SidebarTrigger,SidebarProvider } from "@/components/ui/sidebar";
+import Navbar from "@/components/ui/navbar";
+import AuthProvider from "@/components/ui/providers/AuthProvider";
+import { Toaster } from "@/components/ui/toaster";
 
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
-});
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
-});
+
+const poppins = Poppins({
+  subsets: ['latin'],
+  weight: '400'
+})
 
 export const metadata = {
   title: "Create Next App",
@@ -21,17 +20,21 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" className="dark">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${poppins.className} antialiased`}
       >
-            <SidebarProvider>
-          <AppSidebar />
-          <main>
-            <SidebarTrigger />
-            {children}
-          </main>
-        </SidebarProvider>
+            <AuthProvider>
+                <SidebarProvider>
+                <AppSidebar />
+                <main className="w-full">
+                <SidebarTrigger />
+                <Navbar />
+                {children}
+                <Toaster />
+               </main>
+             </SidebarProvider>
+          </AuthProvider> 
       </body>
     </html>
   );
